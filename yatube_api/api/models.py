@@ -5,8 +5,8 @@ User = get_user_model()
 
 
 class Group(models.Model):
-    title = models.CharField(verbose_name='Название сообщества',
-                             help_text='Введите название сообщества',
+    title = models.CharField(verbose_name='Название группы',
+                             help_text='Введите название группы',
                              max_length=200)
 
     def __str__(self):
@@ -16,7 +16,7 @@ class Group(models.Model):
 class Post(models.Model):
     text = models.TextField()
     pub_date = models.DateTimeField(
-        "Дата публикации", auto_now_add=True
+        "Дата поста", auto_now_add=True
     )
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="posts"
