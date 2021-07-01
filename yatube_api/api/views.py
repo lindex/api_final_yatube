@@ -1,7 +1,8 @@
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, filters, mixins
-from rest_framework.permissions import (IsAuthenticatedOrReadOnly)
+from rest_framework.permissions import (IsAuthenticatedOrReadOnly,
+                                        IsAuthenticated)
 
 from .models import Post, Group, Follow
 from .permissions import IsAuthorOrReadOnly
@@ -41,12 +42,24 @@ class CommentViewSet(viewsets.ModelViewSet):
 
 
 class FollowViewSet(MyViewSet):
+    """
+
+    у нас тест test_follow_not_auth из test_follow.py требует вернуть 401
+     неавторизированному пользователю. Не могу соблюсти тесты и redoc.
+     В коментах ниже описал рабочую версию, если бы не было этого теста.
+
+    """
     serializer_class = FollowSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticated]  # убираем
+    # permission_classes = [IsAuthenticatedOrReadOnly]
     filter_backends = [filters.SearchFilter]
     search_fields = ('user__username', 'following__username',)
 
     def get_queryset(self):
+        # добавляем
+        # if self.request.user.is_anonymous: 
+        #     return Follow.objects.all()
+
         return Follow.objects.filter(following=self.request.user)
 
     def perform_create(self, serializer):
