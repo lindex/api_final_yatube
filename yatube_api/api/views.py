@@ -57,7 +57,7 @@ class FollowViewSet(MyViewSet):
 
     def get_queryset(self):
         # добавляем
-        # if self.request.user.is_anonymous: 
+        # if self.request.user.is_anonymous:
         #     return Follow.objects.all()
 
         return Follow.objects.filter(following=self.request.user)
